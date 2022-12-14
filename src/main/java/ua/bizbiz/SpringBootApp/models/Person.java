@@ -1,26 +1,39 @@
 package ua.bizbiz.SpringBootApp.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "person")
 public class Person {
-    private int id;
+    @Id
+    @Column(name = "id")
+    private Integer id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "surname")
     private String surname;
-    private int age;
+    @Column(name = "birthdate")
+    private String birthdate;
 
     public Person() {
     }
 
-    public Person(int id, String name, String surname, int age) {
+    public Person(Integer id, String name, String surname, String birthdate) {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.age = age;
+        this.birthdate = birthdate;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -40,11 +53,11 @@ public class Person {
         this.surname = surname;
     }
 
-    public int getAge() {
-        return age;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 }
