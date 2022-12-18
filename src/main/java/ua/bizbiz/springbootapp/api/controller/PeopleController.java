@@ -1,47 +1,47 @@
 package ua.bizbiz.springbootapp.api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import ua.bizbiz.springbootapp.api.response.PersonResponse;
-import ua.bizbiz.springbootapp.persistance.entity.Person;
+import org.springframework.web.bind.annotation.RestController;
+import ua.bizbiz.springbootapp.api.PeopleApi;
+import ua.bizbiz.springbootapp.api.model.PersonData;
+import ua.bizbiz.springbootapp.api.model.PersonResponse;
 import ua.bizbiz.springbootapp.service.PeopleService;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/people")
-public class PeopleController {
+public class PeopleController implements PeopleApi {
 
     private final PeopleService peopleService;
 
-    @Autowired
-    public PeopleController(PeopleService peopleService) {
-        this.peopleService = peopleService;
+    @Override
+    public ResponseEntity<PersonResponse> create(PersonData personData) {
+        PersonResponse savedPerson = peopleService.create(personData);
+        return new ResponseEntity<>(savedPerson, HttpStatus.CREATED);
     }
 
-    @GetMapping()
-    public ResponseEntity<List<PersonResponse>> index() {
-        return ResponseEntity.ok(peopleService.listOfPeopleForResponse());
+    @Override
+    public ResponseEntity<List<PersonResponse>> getAll() {
+        return ResponseEntity.ok(peopleService.getAll());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PersonResponse> showPersonById(@PathVariable("id") int id) {
-        return ResponseEntity.ok(peopleService.personForResponse(id));
+    @Override
+    public ResponseEntity<PersonResponse> getById(Integer id) {
+        return ResponseEntity.ok(peopleService.getById(id));
     }
 
-    @PostMapping("/new")
-    public void create(@RequestBody Person person) {
-        peopleService.save(person);
+    @Override
+    public ResponseEntity<PersonResponse> update(PersonData personData, Integer id) {
+        PersonResponse updatedPerson = peopleService.update(id, personData);
+        return ResponseEntity.ok(updatedPerson);
     }
 
-    @PatchMapping("/edit/{id}")
-    public void update(@RequestBody Person person, @PathVariable("id") int id) {
-        peopleService.update(id, person);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable("id") int id) {
+    @Override
+    public ResponseEntity<Void> delete(Integer id) {
         peopleService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
