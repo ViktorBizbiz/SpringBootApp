@@ -5,6 +5,7 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonResponse {
