@@ -7,4 +7,4 @@ create table Person(
     birthdate varchar
 );
 
-insert into Person(name, surname, birthdate) values('oldName', 'oldSurname', '1980-11-11')
+insert into Person(name, surname, birthdate) values('name', 'surname', '1999-11-11')

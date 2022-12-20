@@ -4,13 +4,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import ua.bizbiz.springbootapp.api.PeopleDataReceiver;
+import ua.bizbiz.springbootapp.data.PeopleDataReceiver;
 import ua.bizbiz.springbootapp.api.mapper.PeopleMapper;
 import ua.bizbiz.springbootapp.api.model.PersonData;
 import ua.bizbiz.springbootapp.api.model.PersonResponse;
 import ua.bizbiz.springbootapp.persistance.entity.Person;
 import ua.bizbiz.springbootapp.persistance.repository.PeopleRepository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,11 +60,21 @@ public class PeopleServiceUnitTest {
         int personQuantity = 3;
         List<Person> personList = new ArrayList<>();
         for (int i = 1; i <= personQuantity; i++) {
-            personList.add(peopleDataReceiver.getPerson(i));
+            Person person = peopleDataReceiver.getPerson();
+            person.setId(i);
+            person.setName(person.getName() + i);
+            person.setSurname(person.getSurname() + i);
+            person.setBirthdate(LocalDate.parse(person.getBirthdate()).minusYears(i).toString());
+            personList.add(person);
         }
         List<PersonResponse> expectedResponse = new ArrayList<>();
         for (int i = 1; i <= personQuantity; i++) {
-            expectedResponse.add(peopleDataReceiver.getPersonResponse(i));
+            PersonResponse personResponse = peopleDataReceiver.getPersonResponse();
+            personResponse.setId(i);
+            personResponse.setName(personResponse.getName() + i);
+            personResponse.setSurname(personResponse.getSurname() + i);
+            personResponse.setAge(personResponse.getAge() + i);
+            expectedResponse.add(personResponse);
         }
 
         when(peopleRepositoryMock.findAll()).thenReturn(personList);
@@ -94,7 +105,9 @@ public class PeopleServiceUnitTest {
 
     @Test
     void update_test() {
-        Person personToUpdate = peopleDataReceiver.getPersonOld();
+        Person personToUpdate = peopleDataReceiver.getPerson();
+        personToUpdate.setBirthdate("1980-11-11");
+
         Person updatedPerson = peopleDataReceiver.getPerson();
         PersonData personData = peopleDataReceiver.getPersonData();
         PersonResponse expectedResponse = peopleDataReceiver.getPersonResponse();
