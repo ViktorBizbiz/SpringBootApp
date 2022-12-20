@@ -1,4 +1,4 @@
-package ua.bizbiz.SpringBootApp;
+package ua.bizbiz.springbootapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
